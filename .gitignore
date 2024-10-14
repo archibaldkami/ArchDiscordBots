@@ -1,0 +1,6 @@
+config.json
+client_secrets.json
+token.json
+.vscode/
+error_log.log
+config_backup.json
