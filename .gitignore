@@ -4,3 +4,10 @@ token.json
 .vscode/
 error_log.log
 config_backup.json
+ArchTests/
+tests/
+textures/
+start*.sh
+__pycache__/
+data.py
+.data/
