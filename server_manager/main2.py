@@ -97,9 +97,10 @@ class TicketCloseView(View):
     @discord.ui.button(label="Отменить закрытие", style=discord.ButtonStyle.red)
     async def cancel_close(self, interaction: discord.Interaction, button: Button):
         print("[DEBUG] -> Запрос на отмену закрытия тикета от пользователя:", interaction.user)
-        await interaction.channel.send(
-            embed=discord.Embed(description="Закрытие тикета отменено!", color=discord.Color.red()), ephemeral=True
-        )
+        # await interaction.channel.send(
+        #     embed=discord.Embed(description="Закрытие тикета отменено!", color=discord.Color.red())
+        # )
+        await interaction.response.send_message("Закрытие тикета отменено!", ephemeral=True)
         await interaction.message.delete()
         print("[DEBUG] -> Тикет закрыт отменен и сообщение об отмене удалено")
 
