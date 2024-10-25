@@ -117,9 +117,9 @@ class TicketView(View):
             embed=discord.Embed(description="Тикет будет закрыт через 1 минуту.", color=discord.Color.red()),
             view=TicketCloseView(self.member, interaction.channel)
         )
-        print()
+        print(1)
         await asyncio.sleep(60)
-
+        print(2, [button.disabled for button in close_msg.components[0].children])
         if any([button.disabled for button in close_msg.components[0].children]):
             print("[DEBUG] -> Тикет не был отменен, начинаем процесс закрытия")
             await interaction.channel.set_permissions(self.member, overwrite=None)
