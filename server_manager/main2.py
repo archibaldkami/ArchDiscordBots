@@ -89,18 +89,19 @@ class MyClient(discord.Client):
         print("[DEBUG] -> Синхронизация команд завершена")
 
 class TicketCloseView(View):
-    def __init__(self, member: discord.Member, ticket_channel: discord.TextChannel):
+    def __init__(self, member: discord.Member, ticket_channel: discord.TextChannel, disabled: bool):
         super().__init__(timeout=None)
         self.member = member
         self.ticket_channel = ticket_channel
+        self.disabled = disabled
 
     @discord.ui.button(label="Отменить закрытие", style=discord.ButtonStyle.red)
     async def cancel_close(self, interaction: discord.Interaction, button: Button):
         print("[DEBUG] -> Запрос на отмену закрытия тикета от пользователя:", interaction.user)
-        # await interaction.channel.send(
-        #     embed=discord.Embed(description="Закрытие тикета отменено!", color=discord.Color.red())
-        # )
-        await interaction.response.send_message("Закрытие тикета отменено!", ephemeral=True)
+        await interaction.channel.send(
+            embed=discord.Embed(description="Закрытие тикета отменено!", color=discord.Color.red())
+        )
+        self.disabled = False
         await interaction.message.delete()
         print("[DEBUG] -> Тикет закрыт отменен и сообщение об отмене удалено")
 
@@ -114,16 +115,25 @@ class TicketView(View):
         print("[DEBUG] -> Запрос на закрытие тикета от пользователя:", interaction.user)
         await interaction.response.send_message("Тикет будет закрыт через 1 минуту. Нажмите 'Отменить закрытие', чтобы отменить.", ephemeral=True)
         
+        view = TicketCloseView(self.member, interaction.channel, True)
+
         close_msg = await interaction.channel.send(
             embed=discord.Embed(description="Тикет будет закрыт через 1 минуту.", color=discord.Color.red()),
-            view=TicketCloseView(self.member, interaction.channel)
+            view=view
         )
-        print(1)
-        print(2, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
-        await asyncio.sleep(10)
-        print(3, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
-        await asyncio.sleep(60)
-        if any([button.disabled for button in close_msg.components[0].children]):
+
+        # print(1)
+        # print(2, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
+        # await asyncio.sleep(10)
+        # print(3, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
+        await asyncio.sleep(15)
+        # if any([button.disabled for button in close_msg.components[0].children]):
+        #     print("[DEBUG] -> Тикет не был отменен, начинаем процесс закрытия")
+        #     await interaction.channel.set_permissions(self.member, overwrite=None)
+        #     await interaction.channel.edit(category=client.get_channel(ARCHIVE_CATEGORY_ID))
+        #     await interaction.channel.send("Тикет закрыт и перемещен в архив.")
+        #     print("[DEBUG] -> Тикет закрыт и перенесен в архив")
+        if view.disabled:
             print("[DEBUG] -> Тикет не был отменен, начинаем процесс закрытия")
             await interaction.channel.set_permissions(self.member, overwrite=None)
             await interaction.channel.edit(category=client.get_channel(ARCHIVE_CATEGORY_ID))
