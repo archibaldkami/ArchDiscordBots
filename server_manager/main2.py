@@ -44,13 +44,11 @@ class MyClient(discord.Client):
         await self.tree.sync()
         date_now = datetime.datetime.now()
         date = date_now.strftime("%Y") + "." + date_now.strftime("%m") + "." + date_now.strftime("%d") + "  " + date_now.strftime("%H") + ":" + date_now.strftime("%M") + ":" + date_now.strftime("%S")
-        # logger_channel = client.get_channel(_config_["settings"]["logs"][1])
         logger_channel = discord.utils.get(discord.utils.get(client.guilds, id=int(_config_["settings"]["logs"][0])).channels, id=int(_config_["settings"]["logs"][1]))
         print(_config_["settings"]["logs"][1], type(_config_["settings"]["logs"][1]))
         print(_config_["settings"]["logs"][0], type(_config_["settings"]["logs"][0]))
         print(f'We have logged in as {client.user}')
         os.chdir(path)
-        print(f'Бот {client.user} успешно запущен.')
         
         ticket_channel = client.get_channel(TICKET_CHANNEL_ID)
 
@@ -61,7 +59,7 @@ class MyClient(discord.Client):
             async def button_callback(interaction: discord.Interaction):
                 guild = client.get_guild(GUILD_ID)
                 category = client.get_channel(CATEGORY_ID)
-
+                
                 print("[DEBUG] -> Получен запрос на открытие тикета от пользователя:", interaction.user)
 
                 new_ticket_channel = await guild.create_text_channel(f"🎫-{interaction.user.name}", category=category)
@@ -75,6 +73,7 @@ class MyClient(discord.Client):
                 
                 await interaction.response.send_message(f"Тикет создан: {new_ticket_channel.mention}", ephemeral=True)
                 await interaction.user.send(f"Ваш тикет создан: {new_ticket_channel.mention}")
+                logger_channel.send(f"```{date}\nuser.name: '{interaction.user.name}'\nuser.id: '{interaction.user.id}'\ninteraction: 'ticket_open_request' state: 'success'```")
                 print("[DEBUG] -> Тикет успешно создан и сообщение отправлено пользователю")
 
             button.callback = button_callback
@@ -86,7 +85,7 @@ class MyClient(discord.Client):
             print("[DEBUG] -> Сообщение для создания тикетов отправлено в канал")
 
         # await bot.tree.sync()
-        print("[DEBUG] -> Синхронизация команд завершена")
+        # print("[DEBUG] -> Синхронизация команд завершена")
 
 class TicketCloseView(View):
     def __init__(self, member: discord.Member, ticket_channel: discord.TextChannel, disabled: bool):
@@ -121,23 +120,13 @@ class TicketView(View):
             embed=discord.Embed(description="Тикет будет закрыт через 1 минуту.", color=discord.Color.red()),
             view=view
         )
-
-        # print(1)
-        # print(2, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
-        # await asyncio.sleep(10)
-        # print(3, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
-        await asyncio.sleep(15)
-        # if any([button.disabled for button in close_msg.components[0].children]):
-        #     print("[DEBUG] -> Тикет не был отменен, начинаем процесс закрытия")
-        #     await interaction.channel.set_permissions(self.member, overwrite=None)
-        #     await interaction.channel.edit(category=client.get_channel(ARCHIVE_CATEGORY_ID))
-        #     await interaction.channel.send("Тикет закрыт и перемещен в архив.")
-        #     print("[DEBUG] -> Тикет закрыт и перенесен в архив")
+        await asyncio.sleep(60)
         if view.disabled:
             print("[DEBUG] -> Тикет не был отменен, начинаем процесс закрытия")
             await interaction.channel.set_permissions(self.member, overwrite=None)
             await interaction.channel.edit(category=client.get_channel(ARCHIVE_CATEGORY_ID))
             await interaction.channel.send("Тикет закрыт и перемещен в архив.")
+            logger_channel.send(f"```{date}\nuser.name: '{interaction.user.name}'\nuser.id: '{interaction.user.id}'\ninteraction: 'ticket_close_request' state: 'success'```")
             print("[DEBUG] -> Тикет закрыт и перенесен в архив")
 
 if __name__ == "__main__":
