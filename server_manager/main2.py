@@ -119,7 +119,7 @@ class TicketView(View):
         )
         print(1)
         print(2, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
         print(3, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
         await asyncio.sleep(60)
         if any([button.disabled for button in close_msg.components[0].children]):
