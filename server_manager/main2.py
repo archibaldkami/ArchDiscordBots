@@ -36,7 +36,7 @@ def check_perm_level(interaction=0, message=0):
 class MyClient(discord.Client):
 # Делает Мэджик
     def __init__(self, *args, **kwargs):
-        # super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.tree = discord.app_commands.CommandTree(self)
 
     async def on_ready(self):
@@ -44,7 +44,8 @@ class MyClient(discord.Client):
         await self.tree.sync()
         date_now = datetime.datetime.now()
         date = date_now.strftime("%Y") + "." + date_now.strftime("%m") + "." + date_now.strftime("%d") + "  " + date_now.strftime("%H") + ":" + date_now.strftime("%M") + ":" + date_now.strftime("%S")
-        logger_channel = discord.utils.get(discord.utils.get(client.guilds, id=_config_["settings"]["logs"][0]).channels, id=_config_["settings"]["logs"][1])
+        logger_channel = client.get_channel(_config_["settings"]["logs"][1])
+        # logger_channel = discord.utils.get(discord.utils.get(client.guilds, id=int(_config_["settings"]["logs"][0])).channels, id=int(_config_["settings"]["logs"][1]))
         print(f'We have logged in as {client.user}')
         os.chdir(path)
         print(f'Бот {client.user} успешно запущен.')
