@@ -118,8 +118,8 @@ class TicketView(View):
             view=TicketCloseView(self.member, interaction.channel)
         )
         print(1)
-        await asyncio.sleep(60)
         print(2, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
+        await asyncio.sleep(60)
         if any([button.disabled for button in close_msg.components[0].children]):
             print("[DEBUG] -> Тикет не был отменен, начинаем процесс закрытия")
             await interaction.channel.set_permissions(self.member, overwrite=None)
