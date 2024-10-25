@@ -119,11 +119,11 @@ class TicketView(View):
         )
         print(1)
         await asyncio.sleep(60)
-        print(2, [button.disabled for button in close_msg.components[0].children])
+        print(2, [button.disabled for button in close_msg.components[0].children], [close_msg.components[0].children], [close_msg])
         if any([button.disabled for button in close_msg.components[0].children]):
             print("[DEBUG] -> Тикет не был отменен, начинаем процесс закрытия")
             await interaction.channel.set_permissions(self.member, overwrite=None)
-            await interaction.channel.edit(category=bot.get_channel(ARCHIVE_CATEGORY_ID))
+            await interaction.channel.edit(category=client.get_channel(ARCHIVE_CATEGORY_ID))
             await interaction.channel.send("Тикет закрыт и перемещен в архив.")
             print("[DEBUG] -> Тикет закрыт и перенесен в архив")
 
