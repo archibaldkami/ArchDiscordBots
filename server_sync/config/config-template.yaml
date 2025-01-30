@@ -1,0 +1,44 @@
+bot:
+  token: "${DISCORD_BOT_TOKEN}"  # .env file
+  command_prefix: "$"
+  description: "Discord Server Synchronization Bot"
+  
+servers:
+  primary:
+    id: 1234567891234567890
+    admin_role: "SyncAdmin"
+    log_channel: "log_channel"
+  secondary:
+    id: 1234567891234567890
+    admin_role: "SyncAdmin"
+    log_channel: "log_channel"
+
+channels:
+  message_log: 1234567891234567890
+  voice_log: 1234567891234567890
+  member_log: 1234567891234567890
+  member_update_log: 1234567891234567890
+
+sync:
+  message_history_limit: 1000
+  sync_interval: 60 
+  webhook_name: "ServerSync"
+  
+database:
+  url: "sqlite+aiosqlite:///data/database.sqlite"
+  pool_size: 5
+  max_overflow: 10
+  
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/bot.log"
+
+security:
+  backup_interval: 86400
+  max_backups: 7
+  allowed_roles: ["SyncAdmin", "Moderator"]
+  
+monitoring:
+  stats_interval: 3600
+  alert_channel: "sync-alerts"

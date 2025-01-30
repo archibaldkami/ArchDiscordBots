@@ -11,3 +11,8 @@ start*.sh
 __pycache__/
 data.py
 .data/
+.env
+database.sqlite
+venv/
+bot.log
+error.log

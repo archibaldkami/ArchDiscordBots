@@ -1,0 +1,1 @@
+{"settings": {"logs": ["123456789123456789", "123456789123456789"]}, "servers": ["server_1", "server_2", "server_3", "server_4", "server_5"], "repos": ["repo_1", "repo_2", "repo_3"], "roles": {"system-administrator": [123456789123456789, 123456789123456789, 123456789123456789], "server-administrator": [123456789123456789]}, "not_allowed_commands": ["op"]}

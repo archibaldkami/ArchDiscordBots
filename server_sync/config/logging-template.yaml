@@ -1,0 +1,66 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+    standard:
+        format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        datefmt: "%Y-%m-%d %H:%M:%S"
+    detailed:
+        format: "%(asctime)s - %(name)s - %(levelname)s - %(pathname)s:%(lineno)d - %(message)s"
+        datefmt: "%Y-%m-%d %H:%M:%S"
+
+handlers:
+    console:
+        class: logging.StreamHandler
+        level: INFO
+        formatter: standard
+        stream: ext://sys.stdout
+
+    file:
+        class: logging.FileHandler
+        level: DEBUG
+        formatter: detailed
+        filename: bot.log
+        encoding: utf8
+
+    error_file:
+        class: logging.FileHandler
+        level: ERROR
+        formatter: detailed
+        filename: error.log
+        encoding: utf8
+
+loggers:
+    BotRunner:
+        level: INFO
+        handlers: [console, file, error_file]
+        propagate: false
+    
+    SyncBot:
+        level: INFO
+        handlers: [console, file, error_file]
+        propagate: false
+        
+    ServerClone:
+        level: INFO
+        handlers: [console, file, error_file]
+        propagate: false
+        
+    MessageSync:
+        level: INFO
+        handlers: [console, file, error_file]
+        propagate: false
+
+     ServerSync:
+        level: INFO
+        handlers: [console, file, error_file]
+        propagate: false  
+
+    DatabaseManager:
+        level: INFO
+        handlers: [console, file, error_file]
+        propagate: false
+
+root:
+    level: INFO
+    handlers: [console, file, error_file]
