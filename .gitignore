@@ -16,3 +16,4 @@ database.sqlite
 venv/
 bot.log
 error.log
+.python/
